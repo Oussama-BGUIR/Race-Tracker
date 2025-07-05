@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2023 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.racetracker.ui
 
 import androidx.compose.runtime.getValue
@@ -20,9 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.delay
 
-
 /**
- * This class represents a state holder for race participant.
+ * State holder for a race participant.
  */
 class RaceParticipant(
     val name: String,
@@ -32,36 +16,36 @@ class RaceParticipant(
     private val initialProgress: Int = 0
 ) {
     init {
-        require(maxProgress > 0) { "maxProgress=$maxProgress; must be > 0" }
-        require(progressIncrement > 0) { "progressIncrement=$progressIncrement; must be > 0" }
+        require(maxProgress > 0) { "maxProgress must be greater than 0, but was $maxProgress" }
+        require(progressIncrement > 0) { "progressIncrement must be greater than 0, but was $progressIncrement" }
     }
 
     /**
-     * Indicates the race participant's current progress
+     * The participant's current progress.
      */
     var currentProgress by mutableStateOf(initialProgress)
         private set
 
     /**
-     * Regardless of the value of [initialProgress] the reset function will reset the
-     * [currentProgress] to 0
+     * Reset progress to zero regardless of initial progress.
      */
     fun reset() {
         currentProgress = 0
     }
 
+    /**
+     * Simulate running by incrementally increasing progress until maxProgress is reached.
+     */
     suspend fun run() {
-        do  {
+        while (currentProgress < maxProgress) {
             delay(progressDelayMillis)
             currentProgress += progressIncrement
         }
-            while (currentProgress < maxProgress)
     }
 }
 
 /**
- * The Linear progress indicator expects progress value in the range of 0-1. This property
- * calculate the progress factor to satisfy the indicator requirements.
+ * Computes the progress factor in the range 0..1 for use with LinearProgressIndicator.
  */
 val RaceParticipant.progressFactor: Float
     get() = currentProgress / maxProgress.toFloat()

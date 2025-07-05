@@ -1,47 +1,11 @@
-/*
- * Copyright (C) 2023 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.racetracker.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,17 +21,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun RaceTrackerApp() {
-    /**
-     * Note: To survive the configuration changes such as screen rotation, [rememberSaveable] should
-     * be used with custom Saver object. But to keep the example simple, and keep focus on
-     * Coroutines that implementation detail is stripped out.
+    /*
+     * Note: For config changes survival like rotation, consider using rememberSaveable with a custom Saver.
+     * To keep it simple here, that detail is omitted focusing on coroutines.
      */
-    val playerOne = remember {
-        RaceParticipant(name = "Player 1", progressIncrement = 1)
-    }
-    val playerTwo = remember {
-        RaceParticipant(name = "Player 2", progressIncrement = 2)
-    }
+    val playerOne = remember { RaceParticipant(name = "sound speed", progressIncrement = 1) }
+    val playerTwo = remember { RaceParticipant(name = "light speed", progressIncrement = 2) }
     var raceInProgress by remember { mutableStateOf(false) }
 
     if (raceInProgress) {
@@ -79,6 +38,7 @@ fun RaceTrackerApp() {
             raceInProgress = false
         }
     }
+
     RaceTrackerScreen(
         playerOne = playerOne,
         playerTwo = playerTwo,
@@ -89,7 +49,7 @@ fun RaceTrackerApp() {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .safeDrawingPadding()
-            .padding(horizontal = dimensionResource(R.dimen.padding_medium)),
+            .padding(horizontal = dimensionResource(R.dimen.padding_medium))
     )
 }
 
@@ -104,7 +64,7 @@ private fun RaceTrackerScreen(
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = stringResource(R.string.run_a_race),
@@ -120,15 +80,12 @@ private fun RaceTrackerScreen(
             Icon(
                 painter = painterResource(R.drawable.ic_walk),
                 contentDescription = null,
-                modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
             )
             StatusIndicator(
                 participantName = playerOne.name,
                 currentProgress = playerOne.currentProgress,
-                maxProgress = stringResource(
-                    R.string.progress_percentage,
-                    playerOne.maxProgress
-                ),
+                maxProgress = stringResource(R.string.progress_percentage, playerOne.maxProgress),
                 progressFactor = playerOne.progressFactor,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -136,10 +93,7 @@ private fun RaceTrackerScreen(
             StatusIndicator(
                 participantName = playerTwo.name,
                 currentProgress = playerTwo.currentProgress,
-                maxProgress = stringResource(
-                    R.string.progress_percentage,
-                    playerTwo.maxProgress
-                ),
+                maxProgress = stringResource(R.string.progress_percentage, playerTwo.maxProgress),
                 progressFactor = playerTwo.progressFactor,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -166,9 +120,7 @@ private fun StatusIndicator(
     progressFactor: Float,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier
-    ) {
+    Row(modifier = modifier) {
         Text(
             text = participantName,
             modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_small))
